@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as FOSUBUser;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,7 +44,20 @@ class User extends FOSUBUser
     private $location;
 
     /**
-     * @return integer
+     * @var ArrayCollection<UserSkill>.
+     *
+     * @ORM\OneToMany(targetEntity="UserSkill", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $userSkills;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->userSkills = new ArrayCollection();
+    }
+
+    /**
+     * @return string
      */
     public function getId()
     {
@@ -128,5 +142,34 @@ class User extends FOSUBUser
     public function setLocation($location)
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSkills()
+    {
+        return $this->userSkills;
+    }
+
+    /**
+     * @param ArrayCollection $skills
+     */
+    public function setSkills($skills)
+    {
+        $this->userSkills = $skills;
+    }
+
+    /**
+     * @param UserSkill $skill
+     */
+    public function addSkill(UserSkill $userSkill)
+    {
+        $this->userSkills->add($userSkill);
+    }
+
+    public function removeUserSkill(UserSkill $userSkill)
+    {
+        $this->userSkills->remove($userSkill);
     }
 }
