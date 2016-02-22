@@ -45,7 +45,6 @@ class UserSkill
      */
     private $level;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSkills")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -114,5 +113,21 @@ class UserSkill
     public function setLevel($level)
     {
         $this->level = $level;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 }
