@@ -11,3 +11,55 @@ services:
   my.custom.user_provider:
           class:        AppBundle\Security\Core\User\MyFOSUBUserProvider
           arguments: ['@fos_user.user_manager', { linkedin: linkedin_id }, '@logger', '@doctrine.orm.entity_manager']
+
+#  resource.user:
+#      parent:    "api.resource"
+#      arguments: [ "AppBundle\\Entity\\User" ]
+#      calls:
+#          -      method:    "initNormalizationContext"
+#                 arguments: [ { groups: [ "order_read" ] } ]
+#          -      method:    "initDenormalizationContext"
+#                 arguments: [ { groups: [ "order_write" ] } ]
+#          -      [ "initFilters", [ [ "@resource.user.search_filter"] ] ]
+#      tags:      [ { name: "api.resource" } ]
+#
+#  resource.user.search_filter:
+#      parent:    "api.doctrine.orm.search_filter"
+#      arguments: [ { email: "partial" } ]
+
+  resource.user_skill:
+      parent:    "api.resource"
+      arguments: [ "AppBundle\\Entity\\UserSkill" ]
+      calls:
+          -   method:    "initNormalizationContext"
+              arguments: [ { groups: [ "user_skill_read" ] } ]
+          -   method:    "initDenormalizationContext"
+              arguments: [ { groups: [ "user_skill_write" ] } ]
+          -   method:    "initValidationGroups"
+              arguments: [ [ "user_skill_validate" ] ]
+          -   method:    "initFilters"
+              arguments: [ [ "@resource.user_skill.search_filter" ] ]
+      tags:      [ { name: "api.resource" } ]
+
+  resource.user_skill.search_filter:
+      parent:    "api.doctrine.orm.search_filter"
+      arguments: [ { user: "exact" } ]
+
+
+  resource.user:
+      parent:    "api.resource"
+      arguments: [ "AppBundle\\Entity\\User" ]
+      calls:
+          -   method:    "initNormalizationContext"
+              arguments: [ { groups: [ "user_read" ] } ]
+          -   method:    "initDenormalizationContext"
+              arguments: [ { groups: [ "user_write" ] } ]
+          -   method:    "initValidationGroups"
+              arguments: [ [ "user_validate" ] ]
+          -   method:    "initFilters"
+              arguments: [ [ "@resource.user.search_filter" ] ]
+      tags:      [ { name: "api.resource" } ]
+
+  resource.user.search_filter:
+      parent: "api.doctrine.orm.search_filter"
+      arguments: [ { id: "exact", username: "exact", email: "partial" } ]

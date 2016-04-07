@@ -2,7 +2,7 @@
 
 {% block body %}
     {% if app.user is not null %}
-        <h1>Bonjour {{ app.user.username }}</h1>
+        <h1>Bonjour {{ app.user.username ~ app.user.id}}</h1>
     {% endif %}
     <div id="wrapper">
         <div id="container">

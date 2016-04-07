@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * A skill related to a user with his level of mastery.
@@ -18,6 +19,7 @@ class UserSkill
      * @ORM\Column(name="id", type="string", length=255)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="UUID")
+     * @Groups({"user_read"})
      */
     private $id;
 
@@ -26,6 +28,7 @@ class UserSkill
      *
      * @ORM\Column(type="string")
      * @Assert\Type(type="string")
+     * @Groups({"user_read, user_skill_read, user_skill_write"})
      */
     private $skillId;
 
@@ -34,6 +37,7 @@ class UserSkill
      *
      * @ORM\Column(type="string")
      * @Assert\Type(type="string")
+     * @Groups({"user_read, user_write,user_skill_read, user_skill_write"})
      */
     private $skillTitle;
 
@@ -41,13 +45,14 @@ class UserSkill
      * @var int
      *
      * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer")
+     * @Groups({"user_read,user_skill_read, user_skill_write"})
      */
     private $level;
 
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="userSkills")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Groups({"user_read,user_skill_read, user_skill_write"})
      */
     private $user;
 

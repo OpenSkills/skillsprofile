@@ -19,3 +19,6 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
     client_id:      <client_id>
     client_secret:  <client_secret>
+    cors_allow_origin: 'http://localhost'
+    api_name: 'Your API name'
+    api_description: 'The full description of your API'

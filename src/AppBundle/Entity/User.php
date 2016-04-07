@@ -1,13 +1,20 @@
 <?php
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as FOSUBUser;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * A User of the platform.
+ *
  * @ORM\Table(name="users")
  * @ORM\Entity
+ * @UniqueEntity(fields={"email"}, groups={"user_validate"})
+ * @UniqueEntity(fields={"username"}, groups={"user_validate"})
  */
 class User extends FOSUBUser
 {
@@ -35,6 +42,7 @@ class User extends FOSUBUser
 
     /**
      * @ORM\Column(name="picture_url", type="string", length=255, nullable=true)
+     * @Groups({"user_read, user_write"})
      */
     private $pictureUrl;
 
@@ -44,9 +52,37 @@ class User extends FOSUBUser
     private $location;
 
     /**
+     * The username of the author.
+     *
+     * @var string
+     *
+     * @Groups({"user_read"})
+     * @Assert\NotBlank(groups={"user_validate"})
+     * @Assert\Email(groups={"user_validate"})
+     * @Assert\Expression(
+     *     "this.getEmail() === this.getUsername()",
+     *     message="Username should be equal to email",
+     *     groups={"user_validate"}
+     * )
+     */
+    protected $username;
+
+    /**
+     * The email of the user.
+     *
+     * @var string
+     *
+     * @Groups({"user_read", "user_write"})
+     * @Assert\NotBlank(groups={"user_validate"})
+     * @Assert\Email(groups={"user_validate"})
+     */
+    protected $email;
+
+    /**
      * @var ArrayCollection<UserSkill>.
      *
      * @ORM\OneToMany(targetEntity="UserSkill", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Groups({"user_read", "user_write"})
      */
     private $userSkills;
 
